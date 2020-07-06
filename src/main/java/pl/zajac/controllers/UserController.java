@@ -1,8 +1,11 @@
 package pl.zajac.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.*;
+import pl.zajac.model.dto.UserRegistrationDto;
 import pl.zajac.services.UserService;
 
 @RestController
@@ -14,16 +17,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PostMapping(value = "/registration")
+    public ResponseEntity<Void> registerUser(@RequestBody UserRegistrationDto userRegistrationDto){
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
+    }
     @GetMapping(value = "/test")
-    public void asd(){
-        this.userService.save();
-    }
-    @GetMapping(value = "/test2")
-    public void asdd(){
-        this.userService.save2();
-    }
-    @GetMapping(value = "/test3")
-    public void asddd(){
-        this.userService.save3();
+    public void asd(@RequestParam int a){
+        int b = a/0;
     }
 }
