@@ -1,5 +1,7 @@
 package pl.zajac.model.entities;
 
+import org.springframework.context.annotation.Configuration;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,7 +15,10 @@ public class User implements Serializable {
     private String login;
     @Column(name = "password")
     private String password;
-
+    @Column(name = "email")
+    private String email;
+    @Column(name = "role")
+    private String role;
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private UserProfile userProfile;
 
@@ -51,5 +56,21 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

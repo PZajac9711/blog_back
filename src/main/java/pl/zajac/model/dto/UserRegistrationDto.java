@@ -8,6 +8,10 @@ public class UserRegistrationDto extends UserDto{
         this.email = email;
     }
 
+    public UserRegistrationDto() {
+        super();
+    }
+
     public String getEmail() {
         return email;
     }

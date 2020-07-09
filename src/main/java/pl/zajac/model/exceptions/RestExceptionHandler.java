@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import pl.zajac.model.exceptions.custom.UserRegistrationException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        String error = "Hello ?";
-        return buildResponseEntity(new ApiError(HttpStatus.BAD_GATEWAY, exception,error));
+        String error = "There's no request body";
+        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, exception,error));
     }
 
-    @ExceptionHandler(ArithmeticException.class)
-    protected ResponseEntity<Object> handleEntityNotFound(ArithmeticException ex) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND,ex,"asd");
+    @ExceptionHandler(UserRegistrationException.class)
+    protected ResponseEntity<Object> handleUserAlreadyExistException(UserRegistrationException ex){
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,ex,"There's problem with creating user");
         return buildResponseEntity(apiError);
     }
 
-    
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(apiError,apiError.getStatusCode());
     }

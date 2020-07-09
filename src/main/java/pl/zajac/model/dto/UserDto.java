@@ -9,6 +9,9 @@ public class UserDto {
         this.password = password;
     }
 
+    public UserDto() {
+    }
+
     public String getLogin() {
         return login;
     }
