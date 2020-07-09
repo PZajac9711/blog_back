@@ -3,9 +3,14 @@ package pl.zajac.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import pl.zajac.model.dto.TokenDto;
 import pl.zajac.model.dto.UserDto;
 import pl.zajac.model.dto.UserRegistrationDto;
+import pl.zajac.model.exceptions.custom.InvalidUserData;
 import pl.zajac.model.exceptions.custom.UserRegistrationException;
 import pl.zajac.services.UserService;
 
@@ -23,9 +28,9 @@ public class UserController {
         this.userService.createUser(userRegistrationDto);
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
-    @PostMapping(value = "/login")
-    public ResponseEntity<String> signIn(@RequestBody UserDto userDto){
-        String token = "token";
+    @PostMapping(value = "/authenticate")
+    public ResponseEntity<TokenDto> signIn(@RequestBody UserDto userDto) throws InvalidUserData {
+        TokenDto token = new TokenDto(this.userService.checkUserDetails(userDto));
         return new ResponseEntity<>(token,HttpStatus.OK);
     }
 }

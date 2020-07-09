@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import pl.zajac.model.exceptions.custom.InvalidUserData;
 import pl.zajac.model.exceptions.custom.UserRegistrationException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -24,6 +25,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserRegistrationException.class)
     protected ResponseEntity<Object> handleUserAlreadyExistException(UserRegistrationException ex){
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,ex,"There's problem with creating user");
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(InvalidUserData.class)
+    protected ResponseEntity<Object> handleInvalidUserData(InvalidUserData ex){
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,ex,"There's problem with data from user");
         return buildResponseEntity(apiError);
     }
 

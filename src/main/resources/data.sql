@@ -17,4 +17,4 @@ CREATE TABLE profiles(
 );
 
 
-INSERT INTO users (login, password, email,role) VALUES ('kicaj','$2y$12$bkEw/FmjvM66M2vWUFmYX.ajmGJkipfeZLyHMeWjLzcRNC01MBtGW','kicaj123@wp.pl','admin');
+INSERT INTO users (login, password, email,role) VALUES ('kicaj','$2a$12$z1otQYIj2GorwKglj6na0usit7XlphlJGH9einp.4/fPFybFBs9.2','kicaj123@wp.pl','admin');
