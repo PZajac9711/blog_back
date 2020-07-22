@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PostService {
     List<Post> getAllPosts();
+    Post getSpecificPost(String title);
 }

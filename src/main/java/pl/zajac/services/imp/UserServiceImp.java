@@ -11,6 +11,7 @@ import pl.zajac.model.entities.User;
 import pl.zajac.model.exceptions.custom.InvalidUserData;
 import pl.zajac.model.exceptions.custom.UserRegistrationException;
 import pl.zajac.model.repository.UserRepository;
+import pl.zajac.model.security.jwt.JwtGenerate;
 import pl.zajac.services.UserService;
 
 import java.util.List;
@@ -57,7 +58,8 @@ public class UserServiceImp implements UserService {
         if (!passwordEncoder.matches(userDto.getPassword(),user.get().getPassword())) {
             throw new InvalidUserData("Wrong password");
         }
-        return "Hello :)";
+        JwtGenerate jwtGenerate = new JwtGenerate();
+        return jwtGenerate.generateToken(userDto.getLogin());
     }
 
     private boolean checkLogin(String login) throws UserRegistrationException {

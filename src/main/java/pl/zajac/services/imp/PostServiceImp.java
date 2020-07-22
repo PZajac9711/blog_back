@@ -24,4 +24,9 @@ public class PostServiceImp implements PostService {
         this.postRepository.findAll().forEach(posts::add);
         return posts;
     }
+
+    @Override
+    public Post getSpecificPost(String title) {
+        return this.postRepository.findByTitle(title);
+    }
 }

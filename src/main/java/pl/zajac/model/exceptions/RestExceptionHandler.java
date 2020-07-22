@@ -21,7 +21,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         String error = "There's no request body";
         return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, exception,error));
     }
-
     @ExceptionHandler(UserRegistrationException.class)
     protected ResponseEntity<Object> handleUserAlreadyExistException(UserRegistrationException ex){
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,ex,"There's problem with creating user");
