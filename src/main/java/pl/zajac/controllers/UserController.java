@@ -26,7 +26,7 @@ public class UserController {
     @PostMapping(value = "/registration")
     public ResponseEntity<Void> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) throws UserRegistrationException {
         this.userService.createUser(userRegistrationDto);
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @PostMapping(value = "/authenticate")
     public ResponseEntity<TokenDto> signIn(@RequestBody UserDto userDto) throws InvalidUserData {
