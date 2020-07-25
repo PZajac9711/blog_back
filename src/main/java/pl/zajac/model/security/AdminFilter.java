@@ -27,6 +27,7 @@ public class AdminFilter implements Filter {
             filterChain.doFilter(servletRequest,servletResponse);
         }
         catch (Exception e){
+            e.printStackTrace();
             httpServletResponse.setStatus(401);
         }
     }

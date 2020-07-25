@@ -1,6 +1,7 @@
 package pl.zajac.model.entities;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -16,7 +17,7 @@ public class Post {
     @Column(name = "body")
     private String body;
     @Column(name = "publication_date")
-    private Date publicationDate;
+    private LocalDateTime publicationDate;
     @Column(name = "author_name")
     private String authorName;
 
@@ -44,11 +45,11 @@ public class Post {
         this.body = body;
     }
 
-    public Date getPublicationDate() {
+    public LocalDateTime getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(Date publicationDate) {
+    public void setPublicationDate(LocalDateTime publicationDate) {
         this.publicationDate = publicationDate;
     }
 

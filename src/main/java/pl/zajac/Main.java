@@ -17,7 +17,7 @@ public class Main {
         FilterRegistrationBean<AuthFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new AuthFilter());
         filterRegistrationBean.addUrlPatterns(
-                "/api/posts/asd"
+                "/api/posts/add"
         );
         return filterRegistrationBean;
     }
@@ -26,7 +26,7 @@ public class Main {
         FilterRegistrationBean<AdminFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new AdminFilter());
         filterRegistrationBean.addUrlPatterns(
-               "/api/posts/asd"
+               "/api/posts/add"
         );
         return filterRegistrationBean;
     }

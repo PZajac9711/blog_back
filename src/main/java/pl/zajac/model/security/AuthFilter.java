@@ -33,14 +33,14 @@ public class AuthFilter implements Filter {
                     filterChain.doFilter(servletRequest,servletResponse);
                 }
                 catch (Exception e){
+                    e.printStackTrace();
                     httpServletResponse.setStatus(401);
-                    System.out.println("Error while parsing jwt token");
                 }
             }
         }
         catch (NullPointerException e){
+            e.printStackTrace();
             httpServletResponse.setStatus(400);
-            System.out.println("Acces denied!");
         }
     }
 }
