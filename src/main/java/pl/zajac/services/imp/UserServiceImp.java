@@ -59,7 +59,7 @@ public class UserServiceImp implements UserService {
             throw new InvalidUserData("Wrong password");
         }
         JwtGenerate jwtGenerate = new JwtGenerate();
-        return jwtGenerate.generateToken(userDto.getLogin());
+        return jwtGenerate.generateToken(userDto.getLogin(),user.get().getRole());
     }
 
     private boolean checkLogin(String login) throws UserRegistrationException {

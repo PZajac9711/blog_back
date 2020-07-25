@@ -2,6 +2,8 @@ package pl.zajac.model.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import pl.zajac.model.security.configuration.JwtConfig;
 
 import javax.servlet.*;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -30,13 +33,13 @@ public class AuthFilter implements Filter {
                     filterChain.doFilter(servletRequest,servletResponse);
                 }
                 catch (Exception e){
-                    httpServletResponse.setStatus(403);
+                    httpServletResponse.setStatus(401);
                     System.out.println("Error while parsing jwt token");
                 }
             }
         }
         catch (NullPointerException e){
-            httpServletResponse.setStatus(403);
+            httpServletResponse.setStatus(400);
             System.out.println("Acces denied!");
         }
     }
