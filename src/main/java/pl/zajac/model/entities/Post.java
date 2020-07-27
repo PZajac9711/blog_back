@@ -20,6 +20,16 @@ public class Post {
     private LocalDateTime publicationDate;
     @Column(name = "author_name")
     private String authorName;
+    @Column(name = "published")
+    private boolean isPublished;
+
+    public boolean isPublished() {
+        return isPublished;
+    }
+
+    public void setPublished(boolean published) {
+        isPublished = published;
+    }
 
     public Long getId() {
         return id;

@@ -21,19 +21,20 @@ CREATE TABLE posts(
     title VARCHAR(255),
     body TEXT,
     publication_date DATE,
-    author_name VARCHAR(255)
+    author_name VARCHAR(255),
+    published BOOL
 );
 
 INSERT INTO users (login, password, email,role) VALUES ('kicaj','$2a$12$z1otQYIj2GorwKglj6na0usit7XlphlJGH9einp.4/fPFybFBs9.2','kicaj123@wp.pl','admin');
-INSERT INTO posts (image_url, title, body, publication_date, author_name)
-VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title1','body',CURRENT_DATE,'admin');
-INSERT INTO posts (image_url, title, body, publication_date, author_name)
-VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title2','body',CURRENT_DATE,'admin');
-INSERT INTO posts (image_url, title, body, publication_date, author_name)
-VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title3','body',CURRENT_DATE,'admin');
-INSERT INTO posts (image_url, title, body, publication_date, author_name)
-VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title4','body',CURRENT_DATE,'admin');
-INSERT INTO posts (image_url, title, body, publication_date, author_name)
+INSERT INTO posts (image_url, title, body, publication_date, author_name,published)
+VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title1','body',CURRENT_DATE,'admin',false);
+INSERT INTO posts (image_url, title, body, publication_date, author_name,published)
+VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title2','body',CURRENT_DATE,'admin',true);
+INSERT INTO posts (image_url, title, body, publication_date, author_name,published)
+VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title3','body',CURRENT_DATE,'admin',true);
+INSERT INTO posts (image_url, title, body, publication_date, author_name,published)
+VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title4','body',CURRENT_DATE,'admin',true);
+INSERT INTO posts (image_url, title, body, publication_date, author_name,published)
 VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title ze spacja','<p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p>
 
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, tenetur natus doloremque laborum quos iste ipsum rerum obcaecati impedit odit illo dolorum ab tempora nihil dicta earum fugiat. Temporibus, voluptatibus.</p>
@@ -50,4 +51,4 @@ VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, nostrum, aliquid, animi, ut quas placeat totam sunt tempora commodi nihil ullam alias modi dicta saepe minima ab quo voluptatem obcaecati?</p>
 
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!</p>
-      <hr>',CURRENT_DATE,'admin');
+      <hr>',CURRENT_DATE,'admin',true);

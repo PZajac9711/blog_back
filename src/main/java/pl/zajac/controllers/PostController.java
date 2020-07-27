@@ -21,20 +21,23 @@ public class PostController {
     }
 
     @GetMapping(value = "/posts")
-    public List<Post> getAllPosts(){
-        return this.postService.getAllPosts();
+    public List<Post> getAllPosts(@RequestParam(defaultValue = "0") int page) {
+        return this.postService.getAllPosts(page);
     }
+
     @GetMapping(value = "/posts/specific")
-    public Post getSpecificPost(@RequestParam String title){
+    public Post getSpecificPost(@RequestParam String title) {
         return this.postService.getSpecificPost(title);
     }
+
     @GetMapping(value = "/posts/asd")
-    public String asd(){
+    public String asd() {
         return "asd";
     }
+
     @PostMapping(value = "/posts/add")
-    public ResponseEntity<Void> addPost(@RequestBody PostDto postDto, @RequestHeader("Authorization") String token){
-        postService.addPost(postDto,token);
+    public ResponseEntity<Void> addPost(@RequestBody PostDto postDto, @RequestHeader("Authorization") String token) {
+        postService.addPost(postDto, token);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
