@@ -1,5 +1,6 @@
 package pl.zajac.services;
 
+import pl.zajac.model.dto.EditPostDto;
 import pl.zajac.model.dto.PostDto;
 import pl.zajac.model.entities.Post;
 
@@ -11,4 +12,5 @@ public interface PostService {
     void addPost(PostDto postDto,String token);
     List<Post> findAllPosts();
     void changePostStatus(String id);
+    void editPost(EditPostDto editPostDto);
 }

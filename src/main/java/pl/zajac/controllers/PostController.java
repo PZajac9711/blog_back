@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.zajac.model.dto.EditPostDto;
 import pl.zajac.model.dto.PostDto;
 import pl.zajac.model.entities.Post;
 import pl.zajac.services.PostService;
@@ -48,6 +49,11 @@ public class PostController {
     @GetMapping(value = "/posts/changestatus")
     public ResponseEntity<Void> changePostStatus(@RequestParam String id){
         this.postService.changePostStatus(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping(value = "/posts/editPost")
+    public ResponseEntity<Void> editPost(@RequestBody EditPostDto editPostDto){
+        this.postService.editPost(editPostDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

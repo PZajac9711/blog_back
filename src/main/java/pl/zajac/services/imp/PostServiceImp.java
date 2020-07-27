@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pl.zajac.model.dto.EditPostDto;
 import pl.zajac.model.dto.PostDto;
 import pl.zajac.model.entities.Post;
 import pl.zajac.model.repository.PostRepository;
@@ -62,6 +63,15 @@ public class PostServiceImp implements PostService {
         Long postId = Long.parseLong(id);
         Optional<Post> post = this.postRepository.findById(postId);
         post.get().setPublished(!post.get().isPublished());
+        this.postRepository.save(post.get());
+    }
+
+    @Override
+    public void editPost(EditPostDto editPostDto) {
+        Optional<Post> post = this.postRepository.findById(Long.parseLong(editPostDto.getId()));
+        post.get().setTitle(editPostDto.getTitle());
+        post.get().setBody(editPostDto.getBody());
+        post.get().setImageUrl(editPostDto.getUrl());
         this.postRepository.save(post.get());
     }
 }
