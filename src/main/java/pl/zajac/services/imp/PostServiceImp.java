@@ -1,5 +1,6 @@
 package pl.zajac.services.imp;
 
+import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -10,9 +11,9 @@ import pl.zajac.model.repository.PostRepository;
 import pl.zajac.model.security.jwt.GetUserNameFromJwt;
 import pl.zajac.services.PostService;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImp implements PostService {
@@ -26,7 +27,7 @@ public class PostServiceImp implements PostService {
 
     @Override
     public List<Post> getAllPosts(int page) {
-        PageRequest sortedByDate = PageRequest.of(page,MAX_POSTS_ON_SINGLE_PAGE,Sort.by("id"));
+        PageRequest sortedByDate = PageRequest.of(page, MAX_POSTS_ON_SINGLE_PAGE, Sort.by("id"));
         List<Post> posts = new ArrayList<>();
         this.postRepository.findAllPublished(sortedByDate).forEach(posts::add);
         return posts;
@@ -38,7 +39,7 @@ public class PostServiceImp implements PostService {
     }
 
     @Override
-    public void addPost(PostDto postDto,String token) {
+    public void addPost(PostDto postDto, String token) {
         Post post = new Post();
         post.setImageUrl(postDto.getUrl());
         post.setBody(postDto.getBody());
@@ -47,5 +48,20 @@ public class PostServiceImp implements PostService {
         post.setAuthorName(GetUserNameFromJwt.getUserName(token));
         post.setPublished(true);
         postRepository.save(post);
+    }
+
+    @Override
+    public List<Post> findAllPosts() {
+        List<Post> allPosts = new ArrayList<>();
+        this.postRepository.findAll().forEach(allPosts::add);
+        return allPosts;
+    }
+
+    @Override
+    public void changePostStatus(String id) {
+        Long postId = Long.parseLong(id);
+        Optional<Post> post = this.postRepository.findById(postId);
+        post.get().setPublished(!post.get().isPublished());
+        this.postRepository.save(post.get());
     }
 }

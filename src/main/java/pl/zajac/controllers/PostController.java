@@ -1,5 +1,6 @@
 package pl.zajac.controllers;
 
+import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +40,14 @@ public class PostController {
     public ResponseEntity<Void> addPost(@RequestBody PostDto postDto, @RequestHeader("Authorization") String token) {
         postService.addPost(postDto, token);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @GetMapping(value = "/posts/findall")
+    public List<Post> findAllPosts(){
+        return this.postService.findAllPosts();
+    }
+    @GetMapping(value = "/posts/changestatus")
+    public ResponseEntity<Void> changePostStatus(@RequestParam String id){
+        this.postService.changePostStatus(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

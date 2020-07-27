@@ -9,4 +9,6 @@ public interface PostService {
     List<Post> getAllPosts(int page);
     Post getSpecificPost(String title);
     void addPost(PostDto postDto,String token);
+    List<Post> findAllPosts();
+    void changePostStatus(String id);
 }

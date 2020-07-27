@@ -17,7 +17,7 @@ CREATE TABLE profiles(
 );
 CREATE TABLE posts(
     id INT(6) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    image_url VARCHAR(355),
+    image_url TEXT,
     title VARCHAR(255),
     body TEXT,
     publication_date DATE,
