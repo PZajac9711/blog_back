@@ -13,4 +13,5 @@ public interface PostService {
     List<Post> findAllPosts();
     void changePostStatus(String id);
     void editPost(EditPostDto editPostDto);
+    void addComment(String content, Long id, String token);
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.zajac.model.dto.EditPostDto;
 import pl.zajac.model.dto.PostDto;
+import pl.zajac.model.entities.Comment;
 import pl.zajac.model.entities.Post;
 import pl.zajac.model.repository.PostRepository;
 import pl.zajac.model.security.jwt.GetUserNameFromJwt;
@@ -72,6 +73,16 @@ public class PostServiceImp implements PostService {
         post.get().setTitle(editPostDto.getTitle());
         post.get().setBody(editPostDto.getBody());
         post.get().setImageUrl(editPostDto.getUrl());
+        this.postRepository.save(post.get());
+    }
+
+    @Override
+    public void addComment(String content, Long id, String token) {
+        Optional<Post> post = this.postRepository.findById(id);
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setUserName(GetUserNameFromJwt.getUserName(token));
+        post.get().getComments().add(comment);
         this.postRepository.save(post.get());
     }
 }

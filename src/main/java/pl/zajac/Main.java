@@ -17,7 +17,8 @@ public class Main {
         FilterRegistrationBean<AuthFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new AuthFilter());
         filterRegistrationBean.addUrlPatterns(
-                "/api/posts/add"
+                "/api/posts/add",
+                "/api/posts/addComment"
         );
         return filterRegistrationBean;
     }

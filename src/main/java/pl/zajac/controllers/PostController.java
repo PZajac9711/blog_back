@@ -16,11 +16,9 @@ import java.util.List;
 @RequestMapping(value = "/api")
 public class PostController {
     private PostService postService;
-    private PostRepository postRepository;
     @Autowired
-    public PostController(PostService postService, PostRepository postRepository) {
+    public PostController(PostService postService) {
         this.postService = postService;
-        this.postRepository = postRepository;
     }
 
     @GetMapping(value = "/posts")
@@ -57,8 +55,9 @@ public class PostController {
         this.postService.editPost(editPostDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @GetMapping(value = "/ola")
-    public Post asdasdsa(){
-        return this.postRepository.findById(2L).get();
+    @GetMapping(value = "/posts/addComment")
+    public ResponseEntity<Void> addComment(@RequestHeader("Authorization") String token, @RequestParam String content, @RequestParam Long id){
+        this.postService.addComment(content,id,token);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
