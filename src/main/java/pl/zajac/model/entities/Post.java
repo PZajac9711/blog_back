@@ -1,14 +1,19 @@
 package pl.zajac.model.entities;
 
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
-public class Post {
+public class Post implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @Column(name = "image_url")
     private String imageUrl;
@@ -22,6 +27,18 @@ public class Post {
     private String authorName;
     @Column(name = "published")
     private boolean isPublished;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id")
+    List<Comment> comments = new ArrayList<>();
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     public boolean isPublished() {
         return isPublished;
@@ -78,4 +95,5 @@ public class Post {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 }

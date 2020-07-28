@@ -1,6 +1,5 @@
 package pl.zajac.controllers;
 
-import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.zajac.model.dto.EditPostDto;
 import pl.zajac.model.dto.PostDto;
 import pl.zajac.model.entities.Post;
+import pl.zajac.model.repository.PostRepository;
 import pl.zajac.services.PostService;
 
 import java.util.List;
@@ -16,10 +16,11 @@ import java.util.List;
 @RequestMapping(value = "/api")
 public class PostController {
     private PostService postService;
-
+    private PostRepository postRepository;
     @Autowired
-    public PostController(PostService postService) {
+    public PostController(PostService postService, PostRepository postRepository) {
         this.postService = postService;
+        this.postRepository = postRepository;
     }
 
     @GetMapping(value = "/posts")
@@ -55,5 +56,9 @@ public class PostController {
     public ResponseEntity<Void> editPost(@RequestBody EditPostDto editPostDto){
         this.postService.editPost(editPostDto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping(value = "/ola")
+    public Post asdasdsa(){
+        return this.postRepository.findById(2L).get();
     }
 }
