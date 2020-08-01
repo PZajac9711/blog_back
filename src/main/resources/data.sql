@@ -36,7 +36,7 @@ CREATE TABLE comments
     content TEXT,
     CONSTRAINT f_key FOREIGN KEY (comments_id) REFERENCES posts(id)
 );
-INSERT INTO users (login, password, email,role) VALUES ('kicaj','$2a$12$z1otQYIj2GorwKglj6na0usit7XlphlJGH9einp.4/fPFybFBs9.2','kicaj123@wp.pl','admin');
+INSERT INTO users (login, password, email,role) VALUES ('admin','$2a$10$vLHuX9wiC3uFjgI2eDFO5.gUuvpY/vlpOy.r3WmLi2olkbpy3/5bS','admin@gmail.com','admin');
 INSERT INTO posts (image_url, title, body, publication_date, author_name,published)
 VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title1','<p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p>
 
@@ -128,6 +128,4 @@ VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!</p>
       <hr>',CURRENT_DATE,'admin',true);
 
-INSERT INTO comments(comments_id, user_name, content) VALUES (2,'admin','contencik :)');
-INSERT INTO comments(comments_id, user_name, content) VALUES (2,'admin','contencik :)');
-INSERT INTO comments(comments_id, user_name, content) VALUES (2,'admin','contencik :)');
+INSERT INTO comments(comments_id, user_name, content) VALUES (2,'admin','comment :)');

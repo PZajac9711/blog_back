@@ -10,7 +10,7 @@ import pl.zajac.model.dto.PostDto;
 import pl.zajac.model.entities.Comment;
 import pl.zajac.model.entities.Post;
 import pl.zajac.model.repository.PostRepository;
-import pl.zajac.model.security.jwt.GetUserNameFromJwt;
+import pl.zajac.model.security.jwt.ReadToken;
 import pl.zajac.services.PostService;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class PostServiceImp implements PostService {
                 .setBody(postDto.getBody())
                 .setTitle(postDto.getTitle())
                 .setPublicationDate(java.time.LocalDateTime.now())
-                .setAuthorName(GetUserNameFromJwt.getUserName(token))
+                .setAuthorName(ReadToken.getLogin(token))
                 .setPublished(false)
                 .build();
         postRepository.save(post);
@@ -89,7 +89,7 @@ public class PostServiceImp implements PostService {
         if(!post.isPresent()){
             //tutaj bedzie wyjatek
         }
-        Comment comment = new Comment(content, GetUserNameFromJwt.getUserName(token));
+        Comment comment = new Comment(content, ReadToken.getLogin(token));
         post.get().getComments().add(comment);
         this.postRepository.save(post.get());
     }
