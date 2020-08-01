@@ -5,6 +5,15 @@ public class PostDto {
     private String title;
     private String body;
 
+    public PostDto() {
+    }
+
+    public PostDto(String url, String title, String body) {
+        this.url = url;
+        this.title = title;
+        this.body = body;
+    }
+
     public String getUrl() {
         return url;
     }

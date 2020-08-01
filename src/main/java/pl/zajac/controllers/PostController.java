@@ -16,13 +16,15 @@ import java.util.List;
 @RequestMapping(value = "/api")
 public class PostController {
     private PostService postService;
+
+
     @Autowired
     public PostController(PostService postService) {
         this.postService = postService;
     }
 
     @GetMapping(value = "/posts")
-    public List<Post> getAllPosts(@RequestParam(defaultValue = "0") int page) {
+    public List<Post> getPage(@RequestParam(defaultValue = "0") int page) {
         return this.postService.getAllPosts(page);
     }
 
@@ -31,33 +33,36 @@ public class PostController {
         return this.postService.getSpecificPost(title);
     }
 
-    @GetMapping(value = "/posts/asd")
-    public String asd() {
-        return "asd";
-    }
-
     @PostMapping(value = "/posts/add")
     public ResponseEntity<Void> addPost(@RequestBody PostDto postDto, @RequestHeader("Authorization") String token) {
         postService.addPost(postDto, token);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @GetMapping(value = "/posts/findall")
-    public List<Post> findAllPosts(){
+
+    @GetMapping(value = "/posts/findAll")
+    public List<Post> findAllPosts() {
         return this.postService.findAllPosts();
     }
-    @GetMapping(value = "/posts/changestatus")
-    public ResponseEntity<Void> changePostStatus(@RequestParam String id){
+
+    @GetMapping(value = "/posts/changeStatus")
+    public ResponseEntity<Void> changePostStatus(@RequestParam Long id) {
         this.postService.changePostStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PostMapping(value = "/posts/editPost")
-    public ResponseEntity<Void> editPost(@RequestBody EditPostDto editPostDto){
+    public ResponseEntity<Void> editPost(@RequestBody EditPostDto editPostDto) {
         this.postService.editPost(editPostDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping(value = "/posts/addComment")
-    public ResponseEntity<Void> addComment(@RequestHeader("Authorization") String token, @RequestParam String content, @RequestParam Long id){
-        this.postService.addComment(content,id,token);
+    public ResponseEntity<Void> addComment(@RequestHeader("Authorization") String token, @RequestParam String content, @RequestParam Long id) {
+        this.postService.addComment(content, id, token);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping(value = "/posts/searchForPosts")
+    public List<PostDto> searchPosts(@RequestParam String word){
+        return this.postService.findPostsByWord(word);
     }
 }

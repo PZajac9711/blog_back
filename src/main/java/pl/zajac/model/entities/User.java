@@ -73,4 +73,40 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    private User(String login, String password, String email, String role){
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+    public static class Builder{
+        private String login;
+        private String password;
+        private String email;
+        private String role;
+
+        public Builder setLogin(String login) {
+            this.login = login;
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder setRole(String role) {
+            this.role = role;
+            return this;
+        }
+        public User build(){
+            return new User(login,password,email,role);
+        }
+    }
 }

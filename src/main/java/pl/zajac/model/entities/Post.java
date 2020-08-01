@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+
 @Entity
 @Table(name = "posts")
-public class Post implements Serializable{
+public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -96,4 +97,58 @@ public class Post implements Serializable{
         this.imageUrl = imageUrl;
     }
 
+    public Post() {
+    }
+
+    private Post(String imageUrl, String title, String body, LocalDateTime publicationDate, String authorName, boolean isPublished) {
+        this.imageUrl = imageUrl;
+        this.title = title;
+        this.body = body;
+        this.publicationDate = publicationDate;
+        this.authorName = authorName;
+        this.isPublished = isPublished;
+    }
+
+    public static class Builder {
+        private String imageUrl;
+        private String title;
+        private String body;
+        private LocalDateTime publicationDate;
+        private String authorName;
+        private boolean isPublished;
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public Builder setBody(String body) {
+            this.body = body;
+            return this;
+        }
+
+        public Builder setPublicationDate(LocalDateTime publicationDate) {
+            this.publicationDate = publicationDate;
+            return this;
+        }
+
+        public Builder setAuthorName(String authorName) {
+            this.authorName = authorName;
+            return this;
+        }
+
+        public Builder setPublished(boolean published) {
+            isPublished = published;
+            return this;
+        }
+
+        public Post build() {
+            return new Post(imageUrl, title, body, publicationDate, authorName, isPublished);
+        }
+    }
 }

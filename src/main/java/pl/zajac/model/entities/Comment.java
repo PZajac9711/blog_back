@@ -13,8 +13,10 @@ public class Comment {
     @Column(name = "user_name")
     private String userName;
     private String content;
-    public Comment() {
-
+    public Comment() {}
+    public Comment(String userName, String content){
+        this.userName = userName;
+        this.content = content;
     }
 
     public String getUserName() {

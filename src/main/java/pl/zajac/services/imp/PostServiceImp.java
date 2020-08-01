@@ -42,13 +42,14 @@ public class PostServiceImp implements PostService {
 
     @Override
     public void addPost(PostDto postDto, String token) {
-        Post post = new Post();
-        post.setImageUrl(postDto.getUrl());
-        post.setBody(postDto.getBody());
-        post.setTitle(postDto.getTitle());
-        post.setPublicationDate(java.time.LocalDateTime.now());
-        post.setAuthorName(GetUserNameFromJwt.getUserName(token));
-        post.setPublished(true);
+        Post post = new Post.Builder()
+                .setImageUrl(postDto.getUrl())
+                .setBody(postDto.getBody())
+                .setTitle(postDto.getTitle())
+                .setPublicationDate(java.time.LocalDateTime.now())
+                .setAuthorName(GetUserNameFromJwt.getUserName(token))
+                .setPublished(false)
+                .build();
         postRepository.save(post);
     }
 
@@ -60,29 +61,45 @@ public class PostServiceImp implements PostService {
     }
 
     @Override
-    public void changePostStatus(String id) {
-        Long postId = Long.parseLong(id);
-        Optional<Post> post = this.postRepository.findById(postId);
+    public void changePostStatus(Long id) {
+        Optional<Post> post = this.postRepository.findById(id);
+        if(!post.isPresent()){
+            //tutaj bedzie wyjatek
+        }
         post.get().setPublished(!post.get().isPublished());
         this.postRepository.save(post.get());
     }
 
     @Override
     public void editPost(EditPostDto editPostDto) {
-        Optional<Post> post = this.postRepository.findById(Long.parseLong(editPostDto.getId()));
-        post.get().setTitle(editPostDto.getTitle());
-        post.get().setBody(editPostDto.getBody());
-        post.get().setImageUrl(editPostDto.getUrl());
-        this.postRepository.save(post.get());
+        Optional<Post> postOptional = this.postRepository.findById(Long.parseLong(editPostDto.getId()));
+        if(!postOptional.isPresent()){
+            //tutaj bedzie wyjatek
+        }
+        Post post = postOptional.get();
+        post.setTitle(editPostDto.getTitle());
+        post.setBody(editPostDto.getBody());
+        post.setImageUrl(editPostDto.getUrl());
+        this.postRepository.save(post);
     }
 
     @Override
     public void addComment(String content, Long id, String token) {
         Optional<Post> post = this.postRepository.findById(id);
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setUserName(GetUserNameFromJwt.getUserName(token));
+        if(!post.isPresent()){
+            //tutaj bedzie wyjatek
+        }
+        Comment comment = new Comment(content, GetUserNameFromJwt.getUserName(token));
         post.get().getComments().add(comment);
         this.postRepository.save(post.get());
+    }
+
+    @Override
+    public List<PostDto> findPostsByWord(String word) {
+        List<PostDto> postDto = new ArrayList<>();
+        this.postRepository.findByWord(word).forEach(post -> {
+            postDto.add(new PostDto(post.getImageUrl(), post.getTitle(), post.getBody()));
+        });
+        return postDto;
     }
 }

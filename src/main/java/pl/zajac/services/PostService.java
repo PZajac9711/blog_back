@@ -11,7 +11,8 @@ public interface PostService {
     Post getSpecificPost(String title);
     void addPost(PostDto postDto,String token);
     List<Post> findAllPosts();
-    void changePostStatus(String id);
+    void changePostStatus(Long id);
     void editPost(EditPostDto editPostDto);
     void addComment(String content, Long id, String token);
+    List<PostDto> findPostsByWord(String word);
 }
