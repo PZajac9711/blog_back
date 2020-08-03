@@ -1,4 +1,4 @@
-package unit;
+package pl.zajac.services.imp;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,18 +13,20 @@ import pl.zajac.model.entities.User;
 import pl.zajac.model.exceptions.custom.InvalidUserData;
 import pl.zajac.model.exceptions.custom.UserRegistrationException;
 import pl.zajac.model.repository.UserRepository;
-import pl.zajac.services.imp.UserServiceImp;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserServiceTest {
+public class UserServiceImpTest {
     @InjectMocks
     UserServiceImp userServiceImp;
 
@@ -36,7 +38,7 @@ public class UserServiceTest {
     Converter<User, UserRegistrationDto> registrationToUser;
 
     @Test(expected = UserRegistrationException.class)
-    public void failCreateUserTest() throws UserRegistrationException {
+    public void failCreateUserTest(){
         //given
         List<User> userList = new ArrayList<>();
         userList.add(new User.Builder()
@@ -53,7 +55,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void successCreateUserTest() throws UserRegistrationException {
+    public void successCreateUserTest(){
         //given
         List<User> userList = new ArrayList<>();
         when(userRepository.findUserByLoginOrEmail("login", "user@gmail.com")).thenReturn(userList);
@@ -67,17 +69,18 @@ public class UserServiceTest {
     }
 
     @Test(expected = InvalidUserData.class)
-    public void failCheckUserDetails() throws InvalidUserData {
+    public void failCheckUserDetails(){
         //given
         when(userRepository.findUserByLogin("login")).thenReturn(Optional.empty());
         //when
-        userServiceImp.checkUserDetails(new UserDto("login","password"));
+        userServiceImp.checkUserDetails(new UserDto("login", "password"));
         //then
         verify(userRepository, times(1)).findUserByLogin("login");
         verify(passwordEncoder, times(0)).matches(any(), any());
     }
+
     @Test
-    public void successCheckUserDetails() throws InvalidUserData {
+    public void successCheckUserDetails(){
         //given
         User user = new User.Builder()
                 .setEmail("user@gmail.com")
@@ -88,17 +91,19 @@ public class UserServiceTest {
         when(userRepository.findUserByLogin("login")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         //when
-        String token = userServiceImp.checkUserDetails(new UserDto("Login","password"));
+        String token = userServiceImp.checkUserDetails(new UserDto("Login", "password"));
         //then
-        verify(passwordEncoder, times(1)).matches("password","password");
+        verify(passwordEncoder, times(1)).matches("password", "password");
         verify(userRepository, times(1)).findUserByLogin("login");
         long dotsInToken = token.chars().filter(ch -> ch == '.').count();
         assertEquals(2, dotsInToken);
     }
+
     @Test(expected = UserRegistrationException.class)
     public void wrongEmailTest() throws UserRegistrationException {
         userServiceImp.createUser(new UserRegistrationDto("login", "password", "usergmail.com"));
     }
+
     @Test(expected = UserRegistrationException.class)
     public void wrongLoginTest() throws UserRegistrationException {
         userServiceImp.createUser(new UserRegistrationDto("!login", "password", "user@gmail.com"));

@@ -34,7 +34,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void createUser(UserRegistrationDto userRegistrationDto) throws UserRegistrationException {
+    public void createUser(UserRegistrationDto userRegistrationDto){
         //We need list because there's scenario where one user can have equal login and another equal email and we get 2 rows from db.
         List<User> user = this.userRepository.findUserByLoginOrEmail(
                 userRegistrationDto.getLogin().toLowerCase(),
@@ -50,7 +50,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String checkUserDetails(UserDto userDto) throws InvalidUserData {
+    public String checkUserDetails(UserDto userDto){
         Optional<User> user = userRepository.findUserByLogin(userDto.getLogin().toLowerCase());
         if (!user.isPresent()) {
             throw new InvalidUserData("No user with this login");
@@ -62,7 +62,7 @@ public class UserServiceImp implements UserService {
         return jwtGenerate.generateToken(userDto.getLogin(),user.get().getRole());
     }
 
-    private boolean checkLogin(String login) throws UserRegistrationException {
+    private boolean checkLogin(String login){
         String regex = "^[a-zA-Z0-9]{3,}$";
         Pattern pattern = Pattern.compile(regex);
         if (!pattern.matcher(login).matches()) {
@@ -75,7 +75,7 @@ public class UserServiceImp implements UserService {
         return true;
     }
 
-    private boolean checkEmail(String email) throws UserRegistrationException {
+    private boolean checkEmail(String email){
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex);
         if (!pattern.matcher(email).matches()) {
@@ -84,7 +84,7 @@ public class UserServiceImp implements UserService {
         return true;
     }
 
-    private boolean checkAll(UserRegistrationDto userRegistrationDto) throws UserRegistrationException {
+    private boolean checkAll(UserRegistrationDto userRegistrationDto){
         String password = userRegistrationDto.getPassword();
         String login = userRegistrationDto.getLogin();
         String email = userRegistrationDto.getEmail();

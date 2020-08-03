@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.zajac.model.dto.TokenDto;
 import pl.zajac.model.dto.UserDto;
 import pl.zajac.model.dto.UserRegistrationDto;
-import pl.zajac.model.exceptions.custom.InvalidUserData;
-import pl.zajac.model.exceptions.custom.UserRegistrationException;
 import pl.zajac.services.UserService;
 
 @RestController
@@ -24,12 +22,12 @@ public class UserController {
     }
 
     @PostMapping(value = "/registration")
-    public ResponseEntity<Void> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) throws UserRegistrationException {
+    public ResponseEntity<Void> registerUser(@RequestBody UserRegistrationDto userRegistrationDto){
         this.userService.createUser(userRegistrationDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @PostMapping(value = "/authenticate")
-    public ResponseEntity<TokenDto> signIn(@RequestBody UserDto userDto) throws InvalidUserData {
+    public ResponseEntity<TokenDto> signIn(@RequestBody UserDto userDto){
         TokenDto token = new TokenDto(this.userService.checkUserDetails(userDto));
         return new ResponseEntity<>(token,HttpStatus.OK);
     }
