@@ -2,10 +2,12 @@ package pl.zajac.model.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.stereotype.Component;
 import pl.zajac.model.security.configuration.JwtConfig;
 
+@Component
 public class ReadToken {
-    public static String getLogin(String token){
+    public  String getLogin(String token){
         Claims claims;
         claims = Jwts.parser()
                 .setSigningKey(JwtConfig.getSecret())

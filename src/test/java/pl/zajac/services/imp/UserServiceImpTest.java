@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.zajac.model.coverter.Converter;
+import pl.zajac.model.dto.PostDto;
 import pl.zajac.model.dto.UserDto;
 import pl.zajac.model.dto.UserRegistrationDto;
 import pl.zajac.model.entities.User;
@@ -107,5 +108,16 @@ public class UserServiceImpTest {
     @Test(expected = UserRegistrationException.class)
     public void wrongLoginTest() throws UserRegistrationException {
         userServiceImp.createUser(new UserRegistrationDto("!login", "password", "user@gmail.com"));
+    }
+
+    @Test(expected = InvalidUserData.class)
+    public void checkUserDetailsPasswordDidntMatchAndShouldReturnException(){
+        //given
+        UserDto userDto = new UserDto("admin","admin");
+        //when
+        when(userRepository.findUserByLogin("admin")).thenReturn(Optional.of(new User()));
+        String token = userServiceImp.checkUserDetails(userDto);
+        //then
+        assertNull(token);
     }
 }

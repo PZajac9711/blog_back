@@ -1,6 +1,5 @@
 package pl.zajac.services.imp;
 
-import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,10 +21,12 @@ import java.util.Optional;
 public class PostServiceImp implements PostService {
     private final int MAX_POSTS_ON_SINGLE_PAGE = 2;
     private PostRepository postRepository;
+    private ReadToken readToken;
 
     @Autowired
-    public PostServiceImp(PostRepository postRepository) {
+    public PostServiceImp(PostRepository postRepository, ReadToken readToken) {
         this.postRepository = postRepository;
+        this.readToken = readToken;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class PostServiceImp implements PostService {
                 .setBody(postDto.getBody())
                 .setTitle(postDto.getTitle())
                 .setPublicationDate(java.time.LocalDateTime.now())
-                .setAuthorName(ReadToken.getLogin(token))
+                .setAuthorName(readToken.getLogin(token))
                 .setPublished(false)
                 .build();
         postRepository.save(post);
@@ -97,7 +98,7 @@ public class PostServiceImp implements PostService {
         if(!post.isPresent()){
             throw new PostNotFoundException("Post is not present");
         }
-        Comment comment = new Comment(content, ReadToken.getLogin(token));
+        Comment comment = new Comment(readToken.getLogin(token), content);
         post.get().getComments().add(comment);
         this.postRepository.save(post.get());
     }
