@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import pl.zajac.model.exceptions.custom.InvalidUserData;
+import pl.zajac.model.exceptions.custom.PostNotFoundException;
 import pl.zajac.model.exceptions.custom.UserRegistrationException;
+
+import javax.security.auth.message.AuthException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -19,21 +22,27 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String error = "There's no request body";
-        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, exception,error));
+        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, exception, error));
     }
+
     @ExceptionHandler(UserRegistrationException.class)
-    protected ResponseEntity<Object> handleUserAlreadyExistException(UserRegistrationException ex){
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,ex,"There's problem with creating user");
+    protected ResponseEntity<Object> handleUserAlreadyExistException(UserRegistrationException ex) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex, "There's problem with creating user");
         return buildResponseEntity(apiError);
     }
 
     @ExceptionHandler(InvalidUserData.class)
-    protected ResponseEntity<Object> handleInvalidUserData(InvalidUserData ex){
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,ex,"There's problem with data from user");
+    protected ResponseEntity<Object> handleInvalidUserData(InvalidUserData ex) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex, "There's problem with data from user");
         return buildResponseEntity(apiError);
     }
 
+    @ExceptionHandler(PostNotFoundException.class)
+    protected ResponseEntity<Object> handlePostNotFoundException(PostNotFoundException ex) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex, "There's problem with request");
+        return buildResponseEntity(apiError);
+    }
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
-        return new ResponseEntity<>(apiError,apiError.getStatusCode());
+        return new ResponseEntity<>(apiError, apiError.getStatusCode());
     }
 }

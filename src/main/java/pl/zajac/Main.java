@@ -18,7 +18,10 @@ public class Main {
         filterRegistrationBean.setFilter(new AuthFilter());
         filterRegistrationBean.addUrlPatterns(
                 "/api/posts/add",
-                "/api/posts/addComment"
+                "/api/posts/addComment",
+                "/api/posts/changeStatus",
+                "/api/posts/editPost",
+                "/api/posts/findAll"
         );
         return filterRegistrationBean;
     }
@@ -27,7 +30,10 @@ public class Main {
         FilterRegistrationBean<AdminFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new AdminFilter());
         filterRegistrationBean.addUrlPatterns(
-               "/api/posts/add"
+                "/api/posts/add",
+                "/api/posts/editPost",
+                "/api/posts/changeStatus",
+                "/api/posts/findAll"
         );
         return filterRegistrationBean;
     }

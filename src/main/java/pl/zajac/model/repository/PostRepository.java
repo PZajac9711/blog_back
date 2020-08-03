@@ -9,9 +9,10 @@ import pl.zajac.model.entities.Post;
 
 import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends CrudRepository<Post,Long>, PagingAndSortingRepository<Post,Long> {
-    Post findByTitle(String title);
+    Optional<Post> findByTitle(String title);
     @Query("SELECT u FROM Post u WHERE u.isPublished=true")
     List<Post> findAllPublished(PageRequest pageRequest);
     @Query("SELECT u FROM Post u WHERE u.title like %:word%")

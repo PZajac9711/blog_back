@@ -9,6 +9,7 @@ import pl.zajac.model.dto.EditPostDto;
 import pl.zajac.model.dto.PostDto;
 import pl.zajac.model.entities.Comment;
 import pl.zajac.model.entities.Post;
+import pl.zajac.model.exceptions.custom.PostNotFoundException;
 import pl.zajac.model.repository.PostRepository;
 import pl.zajac.model.security.jwt.ReadToken;
 import pl.zajac.services.PostService;
@@ -37,7 +38,11 @@ public class PostServiceImp implements PostService {
 
     @Override
     public Post getSpecificPost(String title) {
-        return this.postRepository.findByTitle(title);
+        Optional<Post> post = this.postRepository.findByTitle(title);
+        if(!post.isPresent()){
+            throw new PostNotFoundException("Oops seems like there's no post with this title");
+        }
+        return post.get();
     }
 
     @Override
@@ -57,6 +62,9 @@ public class PostServiceImp implements PostService {
     public List<Post> findAllPosts() {
         List<Post> allPosts = new ArrayList<>();
         this.postRepository.findAll().forEach(allPosts::add);
+        if(allPosts.isEmpty()){
+            throw new PostNotFoundException("Seems like you got zero posts in database");
+        }
         return allPosts;
     }
 
@@ -64,7 +72,7 @@ public class PostServiceImp implements PostService {
     public void changePostStatus(Long id) {
         Optional<Post> post = this.postRepository.findById(id);
         if(!post.isPresent()){
-            //tutaj bedzie wyjatek
+            throw new PostNotFoundException("Post is not present");
         }
         post.get().setPublished(!post.get().isPublished());
         this.postRepository.save(post.get());
@@ -74,7 +82,7 @@ public class PostServiceImp implements PostService {
     public void editPost(EditPostDto editPostDto) {
         Optional<Post> postOptional = this.postRepository.findById(Long.parseLong(editPostDto.getId()));
         if(!postOptional.isPresent()){
-            //tutaj bedzie wyjatek
+            throw new PostNotFoundException("Post is not present");
         }
         Post post = postOptional.get();
         post.setTitle(editPostDto.getTitle());
@@ -87,7 +95,7 @@ public class PostServiceImp implements PostService {
     public void addComment(String content, Long id, String token) {
         Optional<Post> post = this.postRepository.findById(id);
         if(!post.isPresent()){
-            //tutaj bedzie wyjatek
+            throw new PostNotFoundException("Post is not present");
         }
         Comment comment = new Comment(content, ReadToken.getLogin(token));
         post.get().getComments().add(comment);
@@ -100,6 +108,9 @@ public class PostServiceImp implements PostService {
         this.postRepository.findByWord(word).forEach(post -> {
             postDto.add(new PostDto(post.getImageUrl(), post.getTitle(), post.getBody()));
         });
+        if(postDto.isEmpty()){
+            throw new PostNotFoundException("Can't find posts matching to this pattern");
+        }
         return postDto;
     }
 }

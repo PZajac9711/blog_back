@@ -10,4 +10,12 @@ public class EditPostDto extends PostDto {
     public void setId(String id) {
         this.id = id;
     }
+
+    public EditPostDto() {
+    }
+
+    public EditPostDto(String url, String title, String body, String id) {
+        super(url, title, body);
+        this.id = id;
+    }
 }
