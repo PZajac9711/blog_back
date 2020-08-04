@@ -38,5 +38,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @GetMapping(value = "/resetPassword")
+    public ResponseEntity<Void> resetPassword(@RequestParam String token,@RequestParam String password){
+        userService.resetPassword(token,password);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

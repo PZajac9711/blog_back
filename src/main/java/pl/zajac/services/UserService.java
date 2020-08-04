@@ -11,4 +11,6 @@ public interface UserService {
     String checkUserDetails(UserDto userDto);
 
     void changePassword(String token, PasswordChangeRequest passwordChangeRequest);
+
+    void resetPassword(String token,String password);
 }

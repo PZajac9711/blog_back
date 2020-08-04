@@ -18,7 +18,9 @@ import pl.zajac.services.UserService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -80,6 +82,19 @@ public class UserServiceImp implements UserService {
             throw new InvalidUserData("Password need to be difference");
         }
         user.get().setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
+        userRepository.save(user.get());
+    }
+
+    @Override
+    public void resetPassword(String token, String password) {
+        //To Do handle moment where token expired \/ and generate exception
+        //Signature exception
+        String email = readToken.getEmailFromResetToken(token);
+        Optional<User> user = userRepository.findUserByEmail(email);
+        if(user.isEmpty()){
+            throw new InvalidUserData("There's no user with this email");
+        }
+        user.get().setPassword(passwordEncoder.encode(password));
         userRepository.save(user.get());
     }
 
