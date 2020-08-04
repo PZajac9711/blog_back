@@ -2,18 +2,22 @@ package pl.zajac.services.imp;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.zajac.model.coverter.Converter;
+import pl.zajac.model.dto.PasswordChangeRequest;
 import pl.zajac.model.dto.PostDto;
 import pl.zajac.model.dto.UserDto;
 import pl.zajac.model.dto.UserRegistrationDto;
+import pl.zajac.model.entities.Post;
 import pl.zajac.model.entities.User;
 import pl.zajac.model.exceptions.custom.InvalidUserData;
 import pl.zajac.model.exceptions.custom.UserRegistrationException;
 import pl.zajac.model.repository.UserRepository;
+import pl.zajac.model.security.jwt.ReadToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +41,8 @@ public class UserServiceImpTest {
     PasswordEncoder passwordEncoder;
     @Mock
     Converter<User, UserRegistrationDto> registrationToUser;
+    @Mock
+    ReadToken readToken;
 
     @Test(expected = UserRegistrationException.class)
     public void failCreateUserTest(){
@@ -119,5 +125,91 @@ public class UserServiceImpTest {
         String token = userServiceImp.checkUserDetails(userDto);
         //then
         assertNull(token);
+    }
+
+    @Test
+    public void changePasswordTestShouldThrowExceptionBecauseNewAndOldPasswordAreTheSame(){
+        //given
+        User user = new User();
+        user.setPassword("same");
+        String token = "token";
+        String expectedMessage = "Password need to be difference";
+        PasswordChangeRequest passwordChangeRequest = new PasswordChangeRequest("same","same");
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        when(readToken.getLogin(token)).thenReturn("login");
+        when(userRepository.findUserByLogin("login")).thenReturn(Optional.of(user));
+        //when
+        Exception exception = assertThrows(InvalidUserData.class, () -> {
+            userServiceImp.changePassword(token,passwordChangeRequest);
+        });
+        //then
+        String actualMessage = exception.getMessage();
+        verify(userRepository,times(0)).save(any());
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void changePasswordTestShouldThrownInvalidUserDataExceptionBecausePasswordDidntMatch(){
+        //given
+        String token = "token";
+        String expectedMessage = "Password didnt match";
+        PasswordChangeRequest passwordChangeRequest = new PasswordChangeRequest("new","old");
+
+        //when
+        when(readToken.getLogin(token)).thenReturn("login");
+        when(userRepository.findUserByLogin("login")).thenReturn(Optional.of(new User()));
+        when(passwordEncoder.matches(anyString(),anyString())).thenReturn(false);
+
+        Exception exception = assertThrows(InvalidUserData.class, () -> {
+            userServiceImp.changePassword(token,passwordChangeRequest);
+        });
+        //then
+        verify(userRepository, times(0)).save(any());
+        assertTrue(exception.getMessage().contains(expectedMessage));
+    }
+
+    @Test
+    public void changePasswordTestShouldReturnInvalidUserDataExceptionBecauseThereIsNoUserWithThisLogin(){
+        //given
+        String token = "token";
+        PasswordChangeRequest passwordChangeRequest = new PasswordChangeRequest("new","old");
+        String expectedMessage = "There's no user with this login";
+
+        //when
+        when(readToken.getLogin(token)).thenReturn("login");
+        when(userRepository.findUserByLogin("login")).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(InvalidUserData.class, () -> {
+            userServiceImp.changePassword(token,passwordChangeRequest);
+        });
+
+        //then
+        verify(passwordEncoder,times(0)).matches(anyString(),anyString());
+        verify(passwordEncoder,times(0)).encode(anyString());
+        verify(userRepository,times(0)).save(any());
+        assertTrue(exception.getMessage().contains(expectedMessage));
+    }
+
+    @Test
+    public void changePasswordTestShouldBeSuccessfullyAllDataIsCorrect(){
+        //given
+        String password = "password";
+        User user = new User();
+        user.setPassword(password);
+        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+        String token = "token";
+        PasswordChangeRequest passwordChangeRequest = new PasswordChangeRequest("new","password");
+
+        //when
+        when(readToken.getLogin(token)).thenReturn("login");
+        when(userRepository.findUserByLogin("login")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        when(passwordEncoder.encode(passwordChangeRequest.getNewPassword())).thenReturn("hello");
+
+        userServiceImp.changePassword(token,passwordChangeRequest);
+
+        //then
+        verify(userRepository,times(1)).save(user);
+        verify(passwordEncoder,times(1)).encode(passwordChangeRequest.getNewPassword());
     }
 }

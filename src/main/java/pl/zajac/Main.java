@@ -21,7 +21,8 @@ public class Main {
                 "/api/posts/addComment",
                 "/api/posts/changeStatus",
                 "/api/posts/editPost",
-                "/api/posts/findAll"
+                "/api/posts/findAll",
+                "/api/changePassword"
         );
         return filterRegistrationBean;
     }

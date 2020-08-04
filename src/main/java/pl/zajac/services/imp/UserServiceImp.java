@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.zajac.model.coverter.Converter;
+import pl.zajac.model.dto.PasswordChangeRequest;
 import pl.zajac.model.dto.UserDto;
 import pl.zajac.model.dto.UserRegistrationDto;
 import pl.zajac.model.entities.User;
@@ -12,6 +13,7 @@ import pl.zajac.model.exceptions.custom.InvalidUserData;
 import pl.zajac.model.exceptions.custom.UserRegistrationException;
 import pl.zajac.model.repository.UserRepository;
 import pl.zajac.model.security.jwt.JwtGenerate;
+import pl.zajac.model.security.jwt.ReadToken;
 import pl.zajac.services.UserService;
 
 import java.util.List;
@@ -23,14 +25,16 @@ public class UserServiceImp implements UserService {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private Converter<User, UserRegistrationDto> registrationToUser;
+    private ReadToken readToken;
 
     @Autowired
     public UserServiceImp(UserRepository userRepository,
                           PasswordEncoder passwordEncoder,
-                          @Qualifier("registerToUser") Converter<User, UserRegistrationDto> registrationToUser) {
+                          @Qualifier("registerToUser") Converter<User, UserRegistrationDto> registrationToUser, ReadToken readToken) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.registrationToUser = registrationToUser;
+        this.readToken = readToken;
     }
 
     @Override
@@ -60,6 +64,23 @@ public class UserServiceImp implements UserService {
         }
         JwtGenerate jwtGenerate = new JwtGenerate();
         return jwtGenerate.generateToken(userDto.getLogin(),user.get().getRole());
+    }
+
+    @Override
+    public void changePassword(String token, PasswordChangeRequest passwordChangeRequest) {
+        String login = readToken.getLogin(token);
+        Optional<User> user = userRepository.findUserByLogin(login);
+        if(user.isEmpty()){
+            throw new InvalidUserData("There's no user with this login");
+        }
+        if(!passwordEncoder.matches(passwordChangeRequest.getOldPassword(), user.get().getPassword())){
+            throw new InvalidUserData("Password didnt match");
+        }
+        if(passwordChangeRequest.getNewPassword().equals(passwordChangeRequest.getOldPassword())){
+            throw new InvalidUserData("Password need to be difference");
+        }
+        user.get().setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
+        userRepository.save(user.get());
     }
 
     private boolean checkLogin(String login){

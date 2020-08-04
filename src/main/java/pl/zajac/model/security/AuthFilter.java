@@ -2,6 +2,8 @@ package pl.zajac.model.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import pl.zajac.model.security.configuration.JwtConfig;
@@ -13,14 +15,18 @@ import java.io.IOException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class AuthFilter implements Filter {
+    private Logger logger = LoggerFactory.getLogger(AuthFilter.class);
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         String header = httpServletRequest.getHeader("authorization");
         try{
-            if(httpServletRequest == null || !header.startsWith("Bearer ")){
-                throw new ServletException("JwtFitler request is null or header didnt start with Bearer");
+            if(header == null){
+                throw new ServletException("No auth field token is empty");
+            }
+            if(!header.startsWith("Bearer ")) {
+                throw new ServletException("Token didnt start with Bearer ");
             }
             else{
                 String token = header.substring(7);
@@ -33,13 +39,13 @@ public class AuthFilter implements Filter {
                     filterChain.doFilter(servletRequest,servletResponse);
                 }
                 catch (Exception e){
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                     httpServletResponse.setStatus(401);
                 }
             }
         }
         catch (NullPointerException e){
-            e.printStackTrace();
+            logger.error(e.getMessage());
             httpServletResponse.setStatus(400);
         }
     }

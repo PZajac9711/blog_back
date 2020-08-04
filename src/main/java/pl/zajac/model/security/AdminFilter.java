@@ -2,6 +2,8 @@ package pl.zajac.model.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.zajac.model.security.configuration.JwtConfig;
 
 import javax.security.auth.message.AuthException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AdminFilter implements Filter {
+    private Logger logger = LoggerFactory.getLogger(AdminFilter.class);
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         Claims claims = null;
@@ -28,7 +31,7 @@ public class AdminFilter implements Filter {
             filterChain.doFilter(servletRequest,servletResponse);
         }
         catch (Exception e){
-            e.printStackTrace();
+            logger.error(e.getMessage());
             httpServletResponse.setStatus(401);
         }
     }

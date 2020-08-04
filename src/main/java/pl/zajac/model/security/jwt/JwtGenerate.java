@@ -25,4 +25,7 @@ public class JwtGenerate {
                 .signWith(signatureAlgorithm, signingKey)
                 .compact();
     }
+    public String generateForgotPasswordToken(String email){
+        return "";
+    }
 }
