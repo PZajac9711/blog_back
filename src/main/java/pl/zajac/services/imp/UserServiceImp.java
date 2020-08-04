@@ -83,6 +83,7 @@ public class UserServiceImp implements UserService {
         userRepository.save(user.get());
     }
 
+
     private boolean checkLogin(String login){
         String regex = "^[a-zA-Z0-9]{3,}$";
         Pattern pattern = Pattern.compile(regex);

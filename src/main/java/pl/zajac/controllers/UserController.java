@@ -14,24 +14,29 @@ import pl.zajac.services.UserService;
 @RequestMapping(value = "/api")
 public class UserController {
     private UserService userService;
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping(value = "/registration")
-    public ResponseEntity<Void> registerUser(@RequestBody UserRegistrationDto userRegistrationDto){
+    public ResponseEntity<Void> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
         this.userService.createUser(userRegistrationDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
     @PostMapping(value = "/authenticate")
-    public ResponseEntity<TokenDto> signIn(@RequestBody UserDto userDto){
+    public ResponseEntity<TokenDto> signIn(@RequestBody UserDto userDto) {
         TokenDto token = new TokenDto(this.userService.checkUserDetails(userDto));
-        return new ResponseEntity<>(token,HttpStatus.OK);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
+
     @PostMapping(value = "/changePassword")
-    public ResponseEntity<Void> changePassword(@RequestHeader("authorization") String token, @RequestBody PasswordChangeRequest passwordChangeRequest){
-        this.userService.changePassword(token,passwordChangeRequest);
+    public ResponseEntity<Void> changePassword(@RequestHeader("authorization") String token, @RequestBody PasswordChangeRequest passwordChangeRequest) {
+        this.userService.changePassword(token, passwordChangeRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 }

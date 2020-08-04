@@ -6,6 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.zajac.model.coverter.Converter;
 import pl.zajac.model.dto.PasswordChangeRequest;
@@ -158,7 +159,6 @@ public class UserServiceImpTest {
         //when
         when(readToken.getLogin(token)).thenReturn("login");
         when(userRepository.findUserByLogin("login")).thenReturn(Optional.of(new User()));
-        when(passwordEncoder.matches(anyString(),anyString())).thenReturn(false);
 
         Exception exception = assertThrows(InvalidUserData.class, () -> {
             userServiceImp.changePassword(token,passwordChangeRequest);

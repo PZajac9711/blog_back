@@ -36,7 +36,7 @@ CREATE TABLE comments
     content TEXT,
     CONSTRAINT f_key FOREIGN KEY (comments_id) REFERENCES posts(id)
 );
-INSERT INTO users (login, password, email,role) VALUES ('admin','$2a$10$vLHuX9wiC3uFjgI2eDFO5.gUuvpY/vlpOy.r3WmLi2olkbpy3/5bS','admin@gmail.com','admin');
+INSERT INTO users (login, password, email,role) VALUES ('admin','$2a$10$vLHuX9wiC3uFjgI2eDFO5.gUuvpY/vlpOy.r3WmLi2olkbpy3/5bS','patzaj9711@gmail.com','admin');
 INSERT INTO posts (image_url, title, body, publication_date, author_name,published)
 VALUES ('https://www.wallpapertip.com/wmimgs/3-35494_beautiful-wallpaper-full-hd.jpg','title1','<p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p>
 

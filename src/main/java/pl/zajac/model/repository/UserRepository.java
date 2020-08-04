@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<User, Long>{
     List<User> findUserByLoginOrEmail(String login, String email);
     Optional<User> findUserByLogin(String login);
+    Optional<User> findUserByEmail(String email);
 }
