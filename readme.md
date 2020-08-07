@@ -4,7 +4,8 @@ Technology used in project:
 * Spring Framework
 * Hibernate
 * H2 database
-
+* Junit
+* Mockito
 #Example
 Front-end is created in angular: https://github.com/PZajac9711/blog_front
 
