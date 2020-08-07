@@ -6,7 +6,8 @@ Technology used in project:
 * H2 database
 * Junit
 * Mockito
-#Example
+
+# Example
 Front-end is created in angular: https://github.com/PZajac9711/blog_front
 
 Video(Click image below)
